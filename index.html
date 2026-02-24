@@ -1,95 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KodNest Premium Build System - Design System</title>
-    <meta name="description" content="KodNest Premium Build System: A calm, intentional, and coherent design system for serious B2C SaaS products.">
-    <link rel="stylesheet" href="index.css">
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Placement Prep - Ace Your Career</title>
 </head>
+
 <body>
-
-    <header class="top-bar">
-        <div class="top-bar__project">KodNest Premium Build System</div>
-        <div class="top-bar__progress">Step 1 / 4</div>
-        <div class="top-bar__status">In Progress</div>
-    </header>
-
-    <section class="context-header">
-        <div class="context-header__content">
-            <h1>Design System Overview</h1>
-            <p>A coherent visual language designed for focus, confidence, and intentionality.</p>
-        </div>
-    </section>
-
-    <main class="main-container">
-        <div class="primary-workspace">
-            <section class="card">
-                <h3>Primary Interaction</h3>
-                <p>This is where the main product interaction happens. Components here are predictable, clean, and follow the established spacing rules. No crowding allowed.</p>
-                
-                <div class="form-group">
-                    <label class="label" for="example-input">Example Input Field</label>
-                    <input type="text" id="example-input" class="input" placeholder="Enter your data here...">
-                </div>
-
-                <div class="btn-group">
-                    <button class="btn btn--primary" id="btn-primary">Primary Action</button>
-                    <button class="btn btn--secondary" id="btn-secondary">Secondary Action</button>
-                </div>
-            </section>
-
-            <section class="card">
-                <h3>Feedback States</h3>
-                <p>Status badges and notifications use muted, calm colors to remain informative without being distracting.</p>
-                <div style="display: flex; gap: 16px;">
-                    <span class="badge badge--success">✓ Success State</span>
-                    <span class="badge badge--warning">⚠ Warning State</span>
-                </div>
-            </section>
-        </div>
-
-        <aside class="secondary-panel">
-            <h3>Step Explanation</h3>
-            <p>This panel provides concise context for the current step. It features the prompt box and action controls.</p>
-            
-            <div class="prompt-box" id="prompt-box">
-npx create-next-app@latest my-premium-saas
-            </div>
-
-            <div class="btn-group" style="flex-direction: column;">
-                <button class="btn btn--secondary" style="width: 100%;">Copy Prompt</button>
-                <button class="btn btn--primary" style="width: 100%;">Build in Lovable</button>
-                <div style="display: flex; gap: 8px;">
-                    <button class="btn btn--secondary" style="flex: 1;">It Worked</button>
-                    <button class="btn btn--secondary" style="flex: 1;">Error</button>
-                </div>
-                <button class="btn btn--secondary" style="width: 100%;">Add Screenshot</button>
-            </div>
-        </aside>
-    </main>
-
-    <footer class="proof-footer">
-        <ul class="checklist">
-            <li class="checklist-item">
-                <div class="checkbox" id="check-ui"></div>
-                <span>UI Built</span>
-            </li>
-            <li class="checklist-item">
-                <div class="checkbox" id="check-logic"></div>
-                <span>Logic Working</span>
-            </li>
-            <li class="checklist-item">
-                <div class="checkbox" id="check-test"></div>
-                <span>Test Passed</span>
-            </li>
-            <li class="checklist-item">
-                <div class="checkbox" id="check-deploy"></div>
-                <span>Deployed</span>
-            </li>
-        </ul>
-    </footer>
-
-    <script src="main.js"></script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
 </body>
+
 </html>

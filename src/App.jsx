@@ -6,6 +6,9 @@ import Practice from './pages/Practice';
 import Assessments from './pages/Assessments';
 import Resources from './pages/Resources';
 import Profile from './pages/Profile';
+import Analyze from './pages/Analyze';
+import Results from './pages/Results';
+import History from './pages/History';
 
 function App() {
     return (
@@ -14,6 +17,10 @@ function App() {
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/app" element={<DashboardShell />}>
                     <Route index element={<Dashboard />} />
+                    <Route path="analyze" element={<Analyze />} />
+                    <Route path="results" element={<Results />} />
+                    <Route path="results/:id" element={<Results />} />
+                    <Route path="history" element={<History />} />
                     <Route path="practice" element={<Practice />} />
                     <Route path="assessments" element={<Assessments />} />
                     <Route path="resources" element={<Resources />} />

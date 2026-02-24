@@ -1,6 +1,8 @@
 import { NavLink, Outlet } from 'react-router-dom';
 import {
     LayoutDashboard,
+    Search,
+    History,
     Code2,
     FileCheck,
     BookOpen,
@@ -21,18 +23,25 @@ const DashboardShell = () => {
                     </h1>
                 </div>
 
-                <nav className="flex-1 px-4 space-y-1">
+                <nav className="flex-1 px-4 space-y-1 overflow-y-auto">
                     <SidebarLink to="/app" end icon={<LayoutDashboard size={20} />} label="Dashboard" />
+                    <SidebarLink to="/app/analyze" icon={<Search size={20} />} label="Analyze Job" />
+                    <SidebarLink to="/app/history" icon={<History size={20} />} label="History" />
+
+                    <div className="pt-4 pb-2">
+                        <p className="px-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Training</p>
+                    </div>
+
                     <SidebarLink to="/app/practice" icon={<Code2 size={20} />} label="Practice" />
                     <SidebarLink to="/app/assessments" icon={<FileCheck size={20} />} label="Assessments" />
                     <SidebarLink to="/app/resources" icon={<BookOpen size={20} />} label="Resources" />
                     <SidebarLink to="/app/profile" icon={<UserCircle2 size={20} />} label="Profile" />
                 </nav>
 
-                <div className="p-4 border-t border-slate-100">
+                <div className="p-4 border-t border-slate-100 mt-auto">
                     <div className="bg-indigo-50 p-4 rounded-xl">
                         <p className="text-xs font-semibold text-primary mb-1 uppercase tracking-wider">Upgrade to Pro</p>
-                        <p className="text-xs text-indigo-700 mb-3">Get unlimited mock interviews.</p>
+                        <p className="text-xs text-indigo-700 mb-3">Get detailed JD analysis.</p>
                         <button className="text-xs font-bold text-primary hover:underline flex items-center gap-1">
                             Learn more <ChevronRight size={12} />
                         </button>
@@ -44,7 +53,7 @@ const DashboardShell = () => {
             <div className="flex-1 ml-64 flex flex-col">
                 {/* Header */}
                 <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-8 sticky top-0 z-10">
-                    <h2 className="text-slate-500 font-medium">Dashboard Overview</h2>
+                    <h2 className="text-slate-500 font-medium tracking-tight">Placement Navigator</h2>
                     <div className="flex items-center gap-4">
                         <button className="p-2 text-slate-400 hover:text-slate-600 transition-colors">
                             <Bell size={20} />
@@ -62,7 +71,7 @@ const DashboardShell = () => {
                 </header>
 
                 {/* Content Outlet */}
-                <main className="p-8">
+                <main className="p-8 pb-16">
                     <Outlet />
                 </main>
             </div>

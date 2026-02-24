@@ -164,3 +164,14 @@ export const getHistoryItem = (id) => {
     const history = getHistory();
     return history.find(item => item.id === id);
 };
+
+export const updateHistoryItem = (id, updates) => {
+    const history = getHistory();
+    const index = history.findIndex(item => item.id === id);
+    if (index !== -1) {
+        history[index] = { ...history[index], ...updates };
+        localStorage.setItem('placement_prep_history', JSON.stringify(history));
+        return history[index];
+    }
+    return null;
+};

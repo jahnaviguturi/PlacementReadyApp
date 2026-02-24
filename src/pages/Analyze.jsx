@@ -80,7 +80,7 @@ const Analyze = () => {
                         ></textarea>
                         <div className="flex justify-between items-center text-xs text-slate-400 font-medium">
                             <span>{jdText.length} characters</span>
-                            <span>Recommended: > 800 chars</span>
+                            <span>Recommended: &gt; 800 chars</span>
                         </div>
                     </div>
                 </div>

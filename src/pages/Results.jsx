@@ -194,6 +194,35 @@ const Results = () => {
                 {/* Left Column: Plan & Questions */}
                 <div className="lg:col-span-2 space-y-8">
 
+                    {/* Company Intelligence Section */}
+                    {data.companyIntel && (
+                        <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden animate-in fade-in slide-in-from-left-4 duration-500">
+                            <div className="p-8 border-b border-slate-100 bg-slate-50/50">
+                                <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+                                    <Building2 className="text-primary" /> Company Intelligence
+                                </h3>
+                            </div>
+                            <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div className="space-y-4">
+                                    <div>
+                                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Industry Focus</p>
+                                        <p className="text-sm font-bold text-slate-800">{data.companyIntel.industry}</p>
+                                    </div>
+                                    <div>
+                                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Size Category</p>
+                                        <p className="text-sm font-bold text-slate-800">{data.companyIntel.sizeCategory}</p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Typical Hiring Focus</p>
+                                    <p className="text-sm text-slate-600 leading-relaxed italic border-l-2 border-primary/20 pl-4">
+                                        "{data.companyIntel.hiringFocus}"
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
                     {/* 7-Day Plan */}
                     <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
                         <div className="p-8 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
@@ -258,12 +287,36 @@ const Results = () => {
                     </div>
                 </div>
 
-                {/* Right Column: Rounds Checklist & Action Box */}
+                {/* Right Column: Round Mapping, Checklist & Action Box */}
                 <div className="space-y-8">
+                    {/* Interactive Round Mapping Timeline */}
+                    <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm animate-in fade-in slide-in-from-right-4 duration-500">
+                        <h3 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+                            <Trophy className="text-amber-500" /> Interview Round Flow
+                        </h3>
+                        <div className="space-y-8 relative">
+                            <div className="absolute left-[11px] top-2 bottom-2 w-0.5 bg-slate-100"></div>
+                            {data.roundMapping.map((round, idx) => (
+                                <div key={idx} className="relative pl-8 group">
+                                    <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-white border-2 border-primary group-hover:bg-primary transition-colors flex items-center justify-center z-10">
+                                        <span className="text-[10px] font-bold text-primary group-hover:text-white">{idx + 1}</span>
+                                    </div>
+                                    <div className="space-y-1">
+                                        <h4 className="text-sm font-bold text-slate-800">{round.name}</h4>
+                                        <p className="text-[10px] font-black text-primary uppercase tracking-widest">{round.focus}</p>
+                                        <p className="text-xs text-slate-500 leading-relaxed mt-2 p-2 bg-slate-50 rounded-lg border border-slate-100">
+                                            <span className="font-bold text-slate-400 mr-1">WHY:</span> {round.why}
+                                        </p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
                     <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm sticky top-24">
                         <div className="flex items-center justify-between mb-6">
                             <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-                                <Trophy className="text-amber-500" /> Preparation Checklist
+                                <Trophy className="text-indigo-400" /> Preparation Checklist
                             </h3>
                             <button
                                 onClick={() => copyToClipboard(JSON.stringify(data.checklist, null, 2), 'Checklist')}
@@ -311,6 +364,12 @@ const Results = () => {
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <div className="pt-10 pb-6 text-center">
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] flex items-center justify-center gap-2">
+                    <AlertCircle size={12} /> Demo Mode: Company intel generated heuristically.
+                </p>
             </div>
         </div>
     );

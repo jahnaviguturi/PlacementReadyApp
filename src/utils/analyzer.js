@@ -25,6 +25,61 @@ const QUESTIONS_BANK = {
     "General": "Describe a difficult technical challenge you solved."
 };
 
+const KNOWN_ENTERPRISES = [
+    "amazon", "google", "microsoft", "meta", "apple", "netflix", "tcs", "infosys",
+    "wipro", "accenture", "cognizant", "ibm", "capgemini", "hcl", "dell",
+    "oracle", "sap", "adobe", "salesforce", "intel", "nvidia", "cisco"
+];
+
+const getCompanyIntel = (companyName) => {
+    const name = companyName.toLowerCase().trim();
+    if (!name) return null;
+
+    const isEnterprise = KNOWN_ENTERPRISES.some(e => name.includes(e));
+    const category = isEnterprise ? "Enterprise (2000+)" : "Startup (<200)";
+    const hiringFocus = isEnterprise
+        ? "Highly structured interviews focusing on DSA, Core CS fundamentals, and scalability."
+        : "Practical problem solving, tech stack depth, and ability to ship features quickly.";
+
+    return {
+        name: companyName,
+        industry: "Technology Services",
+        sizeCategory: category,
+        hiringFocus: hiringFocus,
+        isEnterprise: isEnterprise
+    };
+};
+
+const getRoundMapping = (intel, extractedSkills) => {
+    const isEnterprise = intel?.isEnterprise;
+    const hasDSA = extractedSkills["Core CS"]?.some(s => s.toLowerCase().includes("dsa"));
+    const hasWeb = extractedSkills["Web"]?.length > 0;
+
+    if (isEnterprise && hasDSA) {
+        return [
+            { name: "Round 1: Online Assessment", focus: "DSA + Aptitude", why: "To filter candidates based on algorithmic thinking and speed." },
+            { name: "Round 2: Technical Interview I", focus: "Data Structures & Algorithms", why: "Deep dive into problem-solving capabilities and edge case handling." },
+            { name: "Round 3: Technical Interview II", focus: "Core CS + Projects", why: "Verifying theoretical knowledge (OS/DBMS) and real-world application." },
+            { name: "Round 4: Bar Raiser / HR", focus: "Behavioral & Culture Fit", why: "Ensuring alignment with company leadership principles and long-term fit." }
+        ];
+    }
+
+    if (!isEnterprise && hasWeb) {
+        return [
+            { name: "Round 1: Practical Coding Task", focus: "Live Stack Implementation", why: "Verifying if you can actually build features with their specific tech stack." },
+            { name: "Round 2: System Discussion", focus: "Architecture & Workflow", why: "Understanding your thought process on how components interact in a web app." },
+            { name: "Round 3: Founder/Culture Fit", focus: "Vision & Soft Skills", why: "Direct interaction with leadership to see if you can thrive in a fast-paced environment." }
+        ];
+    }
+
+    return [
+        { name: "Round 1: Initial Screening", focus: "Resume & Basics", why: "Confirming basic eligibility and interest in the role." },
+        { name: "Round 2: Technical Discussion", focus: "Fundamentals & Skills", why: "Ensuring you possess the specific technical skills mentioned in the JD." },
+        { name: "Round 3: Managerial Round", focus: "Projects & Scenarios", why: "Reviewing your past work and how you handle teamwork or technical hurdles." },
+        { name: "Round 4: HR Interview", focus: "Final Fit & Salary", why: "Standard final check on culture, policies, and expectations." }
+    ];
+};
+
 export const analyzeJD = (company, role, jdText) => {
     const lowerJD = jdText.toLowerCase();
 
@@ -75,7 +130,11 @@ export const analyzeJD = (company, role, jdText) => {
         });
     }
 
-    // 4. Checklist
+    // 4. Intel & Round Mapping
+    const companyIntel = getCompanyIntel(company);
+    const roundMapping = getRoundMapping(companyIntel, extractedSkills);
+
+    // 5. Checklist
     const checklist = {
         "Round 1: Aptitude / Basics": [
             "Quantitative Aptitude & Logical Reasoning",
@@ -107,7 +166,7 @@ export const analyzeJD = (company, role, jdText) => {
         ]
     };
 
-    // 5. 7-Day Plan
+    // 6. 7-Day Plan
     const plan = {
         "Day 1–2: Basics + Core CS": [
             "Revise Core Language Fundamentals",
@@ -140,7 +199,9 @@ export const analyzeJD = (company, role, jdText) => {
         readinessScore,
         questions,
         checklist,
-        plan
+        plan,
+        companyIntel,
+        roundMapping
     };
 };
 

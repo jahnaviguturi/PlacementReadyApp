@@ -39,7 +39,7 @@ const skillData = [
 
 const Dashboard = () => {
     const readinessValue = 72;
-    const circumference = 2 * Math.PI * 45; // r=45
+    const circumference = 2 * Math.PI * 80; // r=80
     const offset = circumference - (readinessValue / 100) * circumference;
 
     return (
@@ -129,7 +129,7 @@ const Dashboard = () => {
                                 <circle
                                     cx="96"
                                     cy="96"
-                                    r="45"
+                                    r="80"
                                     className="stroke-slate-100"
                                     strokeWidth="8"
                                     fill="transparent"
@@ -137,7 +137,7 @@ const Dashboard = () => {
                                 <circle
                                     cx="96"
                                     cy="96"
-                                    r="45"
+                                    r="80"
                                     className="stroke-primary"
                                     strokeWidth="8"
                                     fill="transparent"
@@ -150,7 +150,7 @@ const Dashboard = () => {
                                 />
                             </svg>
                             <div className="absolute inset-0 flex flex-col items-center justify-center">
-                                <span className="text-4xl font-black text-slate-900">{readinessValue}/100</span>
+                                <span className="text-3xl font-black text-slate-900">{readinessValue}/100</span>
                                 <span className="text-xs font-medium text-slate-400 uppercase tracking-widest mt-1">Ready</span>
                             </div>
                             <p className="mt-4 text-sm text-slate-500 font-medium tracking-tight">Readiness Score</p>

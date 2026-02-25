@@ -74,7 +74,7 @@ const Results = () => {
         }));
     };
 
-    const circumference = 2 * Math.PI * 45;
+    const circumference = 2 * Math.PI * 55;
     const offset = circumference - (currentScore / 100) * circumference;
 
     const weakSkills = Object.entries(data.extractedSkills)
@@ -173,9 +173,9 @@ const Results = () => {
                     </div>
                     <div className="relative w-32 h-32 mb-4">
                         <svg className="w-full h-full transform -rotate-90">
-                            <circle cx="64" cy="64" r="45" className="stroke-white/10" strokeWidth="8" fill="transparent" />
+                            <circle cx="64" cy="64" r="55" className="stroke-white/10" strokeWidth="8" fill="transparent" />
                             <circle
-                                cx="64" cy="64" r="45" className="stroke-white" strokeWidth="8" fill="transparent" strokeLinecap="round"
+                                cx="64" cy="64" r="55" className="stroke-white" strokeWidth="8" fill="transparent" strokeLinecap="round"
                                 style={{ strokeDasharray: circumference, strokeDashoffset: offset, transition: 'stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1)' }}
                             />
                         </svg>

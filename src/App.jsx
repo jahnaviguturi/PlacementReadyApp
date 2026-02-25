@@ -9,12 +9,16 @@ import Profile from './pages/Profile';
 import Analyze from './pages/Analyze';
 import Results from './pages/Results';
 import History from './pages/History';
+import TestChecklist from './pages/prp/TestChecklist';
+import Ship from './pages/prp/Ship';
 
 function App() {
     return (
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<LandingPage />} />
+                <Route path="/prp/07-test" element={<TestChecklist />} />
+                <Route path="/prp/08-ship" element={<Ship />} />
                 <Route path="/app" element={<DashboardShell />}>
                     <Route index element={<Dashboard />} />
                     <Route path="analyze" element={<Analyze />} />

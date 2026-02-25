@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Building2, Briefcase, FileText, Sparkles } from 'lucide-react';
+import { Search, Building2, Briefcase, FileText, Sparkles, AlertCircle } from 'lucide-react';
 import { analyzeJD, saveToHistory } from '../utils/analyzer';
 
 const Analyze = () => {
@@ -12,24 +12,22 @@ const Analyze = () => {
 
     const handleAnalyze = (e) => {
         e.preventDefault();
-        if (!jdText.trim()) return;
+        const trimmedJD = jdText.trim();
+        if (!trimmedJD) return;
 
         setIsAnalyzing(true);
 
         // Simulate thinking
         setTimeout(() => {
-            const results = analyzeJD(company, role, jdText);
-            const savedEntry = saveToHistory({
-                company,
-                role,
-                jdText,
-                ...results
-            });
+            const entry = analyzeJD(company, role, trimmedJD);
+            saveToHistory(entry);
 
             setIsAnalyzing(false);
-            navigate(`/app/results/${savedEntry.id}`);
+            navigate(`/app/results/${entry.id}`);
         }, 1500);
     };
+
+    const isJdShort = jdText.trim().length > 0 && jdText.trim().length < 200;
 
     return (
         <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
@@ -73,14 +71,22 @@ const Analyze = () => {
                         </label>
                         <textarea
                             placeholder="Paste the full job description here..."
-                            className="w-full h-64 px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all resize-none font-sans leading-relaxed"
+                            className={`w-full h-64 px-4 py-3 rounded-xl border focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all resize-none font-sans leading-relaxed ${isJdShort ? 'border-amber-300 bg-amber-50/30' : 'border-slate-200'}`}
                             value={jdText}
                             onChange={(e) => setJdText(e.target.value)}
                             required
                         ></textarea>
-                        <div className="flex justify-between items-center text-xs text-slate-400 font-medium">
-                            <span>{jdText.length} characters</span>
-                            <span>Recommended: &gt; 800 chars</span>
+
+                        <div className="flex justify-between items-center text-xs font-medium">
+                            <div className="flex items-center gap-4">
+                                <span className="text-slate-400">{jdText.length} characters</span>
+                                {isJdShort && (
+                                    <span className="text-amber-600 flex items-center gap-1 animate-pulse">
+                                        <AlertCircle size={12} /> This JD is too short to analyze deeply. Paste full JD for better output.
+                                    </span>
+                                )}
+                            </div>
+                            <span className="text-slate-400">Recommended: &gt; 800 chars</span>
                         </div>
                     </div>
                 </div>

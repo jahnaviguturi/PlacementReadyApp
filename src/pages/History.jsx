@@ -1,20 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getHistory } from '../utils/analyzer';
-import { History as HistoryIcon, Building2, Briefcase, Calendar, ChevronRight, Search, Trash2 } from 'lucide-react';
+import { History as HistoryIcon, Building2, Briefcase, Calendar, ChevronRight, Search, Trash2, AlertCircle } from 'lucide-react';
 
 const History = () => {
     const [history, setHistory] = useState([]);
+    const [showCorruptedMessage, setShowCorruptedMessage] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
-        setHistory(getHistory());
+        const loadedHistory = getHistory();
+        setHistory(loadedHistory);
+
+        // Check if localStorage has more items than loaded (implies some were corrupted/filtered)
+        try {
+            const raw = JSON.parse(localStorage.getItem('placement_prep_history') || '[]');
+            if (raw.length > loadedHistory.length) {
+                setShowCorruptedMessage(true);
+            }
+        } catch (e) {
+            setShowCorruptedMessage(true);
+        }
     }, []);
 
     const clearHistory = () => {
         if (window.confirm('Clear all analysis history?')) {
             localStorage.removeItem('placement_prep_history');
             setHistory([]);
+            setShowCorruptedMessage(false);
         }
     };
 
@@ -34,6 +47,13 @@ const History = () => {
                     </button>
                 )}
             </div>
+
+            {showCorruptedMessage && (
+                <div className="p-4 bg-amber-50 border border-amber-200 rounded-2xl flex items-center gap-3 text-amber-700 text-sm font-medium animate-in zoom-in-95 duration-300">
+                    <AlertCircle size={18} />
+                    One saved entry couldn't be loaded. Create a new analysis.
+                </div>
+            )}
 
             {history.length === 0 ? (
                 <div className="bg-white rounded-3xl border border-dashed border-slate-300 p-20 text-center flex flex-col items-center space-y-4">
@@ -55,48 +75,51 @@ const History = () => {
                 </div>
             ) : (
                 <div className="grid grid-cols-1 gap-4">
-                    {history.map((item) => (
-                        <div
-                            key={item.id}
-                            onClick={() => navigate(`/app/results/${item.id}`)}
-                            className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:border-primary/40 hover:shadow-md transition-all cursor-pointer group flex items-center justify-between"
-                        >
-                            <div className="flex items-center gap-6">
-                                <div className="hidden md:flex flex-col items-center justify-center min-w-[70px] p-3 bg-slate-50 border border-slate-100 rounded-xl group-hover:bg-indigo-50 transition-colors">
-                                    <span className="text-2xl font-black text-slate-800 group-hover:text-primary transition-colors">{item.readinessScore}%</span>
-                                    <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-0.5">SCORE</span>
+                    {history.map((item) => {
+                        const allSkills = Object.values(item.extractedSkills || {}).flat();
+                        return (
+                            <div
+                                key={item.id}
+                                onClick={() => navigate(`/app/results/${item.id}`)}
+                                className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:border-primary/40 hover:shadow-md transition-all cursor-pointer group flex items-center justify-between"
+                            >
+                                <div className="flex items-center gap-6">
+                                    <div className="hidden md:flex flex-col items-center justify-center min-w-[70px] p-3 bg-slate-50 border border-slate-100 rounded-xl group-hover:bg-indigo-50 transition-colors">
+                                        <span className="text-2xl font-black text-slate-800 group-hover:text-primary transition-colors">{item.finalScore || item.readinessScore || 0}%</span>
+                                        <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-0.5">SCORE</span>
+                                    </div>
+
+                                    <div className="space-y-1">
+                                        <div className="flex items-center gap-2">
+                                            <Building2 size={14} className="text-slate-300" />
+                                            <h3 className="font-bold text-slate-900 group-hover:text-primary transition-colors">{item.company || 'Direct JD Paste'}</h3>
+                                        </div>
+                                        <div className="flex flex-wrap items-center gap-y-1 gap-x-4 text-xs font-medium text-slate-500">
+                                            <span className="flex items-center gap-1.5"><Briefcase size={13} className="text-slate-300" /> {item.role || 'Career Analysis'}</span>
+                                            <span className="flex items-center gap-1.5"><Calendar size={13} className="text-slate-300" /> {new Date(item.createdAt).toLocaleDateString()}</span>
+                                            <span className="flex items-center gap-1.5"><Search size={13} className="text-slate-300" /> {allSkills.length} Skills found</span>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div className="space-y-1">
-                                    <div className="flex items-center gap-2">
-                                        <Building2 size={14} className="text-slate-300" />
-                                        <h3 className="font-bold text-slate-900 group-hover:text-primary transition-colors">{item.company || 'Unknown Company'}</h3>
+                                <div className="flex items-center gap-4">
+                                    <div className="flex -space-x-1">
+                                        {allSkills.slice(0, 3).map((skill, i) => (
+                                            <div key={i} className="px-2 py-0.5 bg-slate-50 border border-slate-200 rounded text-[9px] font-bold text-slate-500 uppercase">
+                                                {skill}
+                                            </div>
+                                        ))}
+                                        {allSkills.length > 3 && (
+                                            <div className="px-2 py-0.5 bg-slate-100 border border-slate-200 rounded text-[9px] font-bold text-slate-400">
+                                                +{allSkills.length - 3}
+                                            </div>
+                                        )}
                                     </div>
-                                    <div className="flex flex-wrap items-center gap-y-1 gap-x-4 text-xs font-medium text-slate-500">
-                                        <span className="flex items-center gap-1.5"><Briefcase size={13} className="text-slate-300" /> {item.role || 'Career Analysis'}</span>
-                                        <span className="flex items-center gap-1.5"><Calendar size={13} className="text-slate-300" /> {new Date(item.createdAt).toLocaleDateString()}</span>
-                                        <span className="flex items-center gap-1.5"><Search size={13} className="text-slate-300" /> {Object.values(item.extractedSkills).flat().length} Skills found</span>
-                                    </div>
+                                    <ChevronRight className="text-slate-300 group-hover:text-primary group-hover:translate-x-1 transition-all" size={20} />
                                 </div>
                             </div>
-
-                            <div className="flex items-center gap-4">
-                                <div className="flex -space-x-1">
-                                    {Object.values(item.extractedSkills).flat().slice(0, 3).map((skill, i) => (
-                                        <div key={i} className="px-2 py-0.5 bg-slate-50 border border-slate-200 rounded text-[9px] font-bold text-slate-500 uppercase">
-                                            {skill}
-                                        </div>
-                                    ))}
-                                    {Object.values(item.extractedSkills).flat().length > 3 && (
-                                        <div className="px-2 py-0.5 bg-slate-100 border border-slate-200 rounded text-[9px] font-bold text-slate-400">
-                                            +{Object.values(item.extractedSkills).flat().length - 3}
-                                        </div>
-                                    )}
-                                </div>
-                                <ChevronRight className="text-slate-300 group-hover:text-primary group-hover:translate-x-1 transition-all" size={20} />
-                            </div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
             )}
         </div>
